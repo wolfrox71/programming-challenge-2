@@ -16,10 +16,14 @@ def home():
 def maths_quiz():
     if request.method == "POST":
         score = 0
+        correct = []
         for x in session["questions"]:
             if str(request.form[x]) == str(eval(x)):
                 score+=1
-        return f"<h1>You Scored: {str(score)} </h1>"
+                correct.append([x,1,request.form[x]])
+                continue
+            correct.append([x,0,request.form[x]])
+        return render_template("challenges/maths_quiz.html", questions=correct, answers="true", score=score/len(correct)*100)
     operations = ["*","-","+"]
     min_number = 0
     max_number = 10
@@ -27,4 +31,4 @@ def maths_quiz():
     session["questions"] = []
     for i in range(number_of_questions):
         session["questions"].append(f"{randint(min_number,max_number)}{choice(operations)}{randint(min_number,max_number)}")
-    return render_template("challenges/maths_quiz.html", questions=session["questions"])
+    return render_template("challenges/maths_quiz.html", questions=session["questions"], answerws = "false")
