@@ -12,7 +12,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.sqlite3"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.permanent_session_lifetime = timedelta(minutes=5)
 
-str = database.db("main.db","users")
+users_db = database.db("main.db","users")
 users_db.setup("username","password", "role")
 
 addresses = {}
@@ -58,8 +58,10 @@ def login():
             return render_template("/menu/login.html")
         session["username"] = username
         session["password"] = hash(password)
+        if "select_args" not in session:
+            session["select_args"] = [session["username"], 1, session["password"],2]
         
-        if len(users_db.select_max(*sesssession["username"], 1, session["password"],2) :
+        if len(users_db.select_max(*session["select_args"])):
             if get_redirect() is not None:
                 session["logged in"] = True
                 flash(f"logged in as user {username}", "info")
@@ -96,7 +98,10 @@ def user_home():
 def user_create():
     if "username" not in session: #if the user hasnt tryed to login
         return redirect(url_for("login")) # get the users username and password
-    if len(users_db.select_max(session["username"], 1, session["password"],2)) != 0: #see if the user account already exists
+    if "select_args" not in session:
+        session["select_args"] = [session["username"], 1, session["password"],2]
+        
+    if len(users_db.select_max(*session["select_args"])) != 0: #see if the user account already exists
         return redirect(url_for("home")) # return to the home page to be redirected
     if request.method == "POST":
         if request.form["create_user"] == "yes": #make sure the user wants to create the user
@@ -120,9 +125,10 @@ def user_update():
         new_user[2] = request.form["roles"]
         print(new_user)
         if "select_args" not in session:
-            
+            session["select_args"] = [session["username"], 1, session["password"],2]
+        
         users_db.update_max(session["username"],1, session["password"],2,request.form["roles"],3)
-        return str(user_db.select_max(*sesson["select_args"]))
+        return str(users_db.select_max(*session["select_args"]))
         
         return request.form["roles"]
     return render_template("/menu/update.html",roles=info.roles)
