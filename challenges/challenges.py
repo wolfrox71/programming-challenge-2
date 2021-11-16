@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, request, url_for, flash, session
+from random import randint, choice
 import database_mod
 
 challenges_bp = Blueprint("challenges", __name__,
@@ -11,6 +12,19 @@ users_db.setup("username","password", "role")
 def home():
     return render_template("challenges/home.html")
 
-@challenges_bp.route("/maths_quiz")
+@challenges_bp.route("/maths_quiz/", methods=["POST","GET"])
 def maths_quiz():
-    return render_template("challenges/maths_quiz.html")
+    if request.method == "POST":
+        score = 0
+        for x in session["questions"]:
+            if str(request.form[x]) == str(eval(x)):
+                score+=1
+        return f"<h1>You Scored: {str(score)} </h1>"
+    operations = ["*","-","+"]
+    min_number = 0
+    max_number = 10
+    number_of_questions = 10
+    session["questions"] = []
+    for i in range(number_of_questions):
+        session["questions"].append(f"{randint(min_number,max_number)}{choice(operations)}{randint(min_number,max_number)}")
+    return render_template("challenges/maths_quiz.html", questions=session["questions"])

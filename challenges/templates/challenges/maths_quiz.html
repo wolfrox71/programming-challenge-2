@@ -2,5 +2,18 @@
 {% block title %} User Home {% endblock %}
 
 {% block content %}
-<p>Maths Quiz</p>
+
+<form action="#" method="POST">
+<table>
+
+{% for question in questions %}
+
+<tr><td>{{question}}</td><td><input type="text" name={{question}}></td></tr>
+
+{% endfor %}
+
+</table>
+<input type="submit" value="submit">
+</form>
+
 {% endblock %}
