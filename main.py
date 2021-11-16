@@ -3,7 +3,7 @@ from datetime import timedelta
 from database.database import database_bp
 from user.user import user_bp
 from functions.functions import functions_bp
-
+from challenges.challenges import challenges_bp
 import database_mod
 
 app = Flask(__name__)
@@ -17,9 +17,8 @@ users_db.setup("username","password", "role")
 app.register_blueprint(database_bp, url_prefix="/database/")
 app.register_blueprint(user_bp, url_prefix="/user/")
 app.register_blueprint(functions_bp, url_prefix="/")
+app.register_blueprint(challenges_bp, url_prefix="/game/")
 addresses = {}
-
-
 
 def get_redirect(redirect_arg=False):
     if "redirect" not in session:
@@ -32,8 +31,7 @@ def get_redirect(redirect_arg=False):
         return url_for(redirect)
     return None
 
-
-@app.route("/game/")
+@app.route("/map/")
 def game():
     return str(app.url_map)
     
