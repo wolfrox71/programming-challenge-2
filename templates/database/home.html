@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %} Database Home {% endblock %}
+
+{% block content %}
+
+<table>
+<tr><td><a href={{ url_for('database_list') }}>Database List</a></td></tr>
+<tr><td><a href={{ url_for('database_clear') }}>Database Clear</a></td></tr>
+</table>
+
+{% endblock %}

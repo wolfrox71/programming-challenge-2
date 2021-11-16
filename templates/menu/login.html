@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<script>
+function show_password(){
+    var button = document.getElementById("password");
+    var text = document.getElementsByName("show_password_button")[0];
+    switch (button.type) {
+        case "password":
+            button.type = "text";
+            text.innerHTML = "Hide Password";
+            break;
+        case "text":            
+            button.type = "password";
+            text.innerHTML = "Show Password";
+            break;
+        default:
+            break;
+    }
+}
+</script>
+
+<form action="#" method="POST">
+    <p>Username</p>
+    <input type="text" name="username" placeholder="Enter your username:" id="username">
+    <p>Password</p>
+    <input type="password" name="password" placeholder="Enter your password:" id="password">
+    <input type="submit" value="submit">
+</form>
+
+<button name="show_password_button" type="show_password_id" onclick="show_password()">Show password</button>
+{% endblock %}

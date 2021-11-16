@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Update User{% endblock %}
+
+{% block content %}
+<form action="#" method="POST">
+    <select id="roles" name="roles">
+    {% for role in roles %}
+    <option value={{role}}>{{role}}</option>
+    {% endfor %}
+    </select>
+    <input type="submit" value="submit">
+</form>
+{% endblock %}
