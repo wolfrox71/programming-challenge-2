@@ -1,6 +1,6 @@
 function sort_alph(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  table = document.getElementById("to_sort");
+  table = document.getElementById("sort_table_id");
   switching = true;
   //Set the sorting direction to ascending:
   dir = "asc"; 
@@ -17,8 +17,8 @@ function sort_alph(n) {
       shouldSwitch = false;
       /*Get the two elements you want to compare,
       one from current row and one from the next:*/
-      x = rows[i].getElementsByTagName("TD")[n];
-      y = rows[i + 1].getElementsByTagName("TD")[n];
+      x = rows[i].getElementsByTagName("td")[n];
+      y = rows[i + 1].getElementsByTagName("td")[n];
       /*check if the two rows should switch place,
       based on the direction, asc or desc:*/
       if (dir == "asc") {
@@ -55,7 +55,7 @@ function sort_alph(n) {
 
 function sort_num(n) {
   var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  table = document.getElementById("to_sort");
+  table = document.getElementById("sort_table_id");
   switching = true;
   //Set the sorting direction to ascending:
   dir = "asc"; 

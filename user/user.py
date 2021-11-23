@@ -13,13 +13,14 @@ def user_home():
 
 @user_bp.route("/create/", methods=["POST","GET"])
 def user_create():
-    if "username" not in session: #if the user hasnt tryed to login
+    if "username" not in session: #if the user hasnt tried to login
         session["redirect"] = "user.user_create"
         return redirect(url_for("functions.login")) # get the users username and password
     if "select_args" not in session:
         session["select_args"] = [session["username"], 1, session["password"],2]
         
     if len(users_db.select_max(*session["select_args"])) != 0: #see if the user account already exists
+        flash("You are already logged in. Sign out and login to create a new account")
         return redirect(url_for("functions.home")) # return to the home page to be redirected
     
     if request.method == "POST":

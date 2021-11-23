@@ -3,18 +3,28 @@
 
 {% block content %}
 
-<table>
+<script src="{{ url_for('static',filename='javascript/table_search.js') }}"></script>
+<script src="{{ url_for('static',filename='javascript/table_sort.js') }}"></script>
 
+<table id="sort_table_id">
+<input type="text" onkeyup="table_search()" id="search_box" placeholder="Search for users"> <!-- add a search box for the table searching -->
 <form method="POST" action="#">
-{% for user in users %}
+<input type="radio" value="¦|" name="to_del" checked hidden> <!-- add a defualt user to delete with no values so that if delete is acidentally pressed it doesnt delete the bottom user -->
+
 <tr>
-{% for attr in user %}
+    <td onclick="sort_alph(0)">Username</td>
+    <td onclick="sort_alph(1)">Password</td>
+    <td onclick="sort_alph(2)">Role</td>
+</tr>
 
-<td>{{attr}}</td>
-
+{% for user in users %} 
+<!-- for each user in the database -->
+<tr>
+{% for attr in user %} <!-- for each column in the database -->
+<td>{{attr}}</td> <!-- possible attributes include(username|password|role) -->
 {% endfor %}
-<td><input type="radio" value="{{user[0]}}¦|{{user[1]}}" name="to_del" checked> </td>
-<tr>
+<td><input type="radio" value="{{user[0]}}¦|{{user[1]}}" name="to_del"> </td> <!--sets the radio button at the end of the each line to have the value of the username and password of the user-->
+</tr>
 {% endfor %}
 <input type="submit" value="submit">
 </form>
