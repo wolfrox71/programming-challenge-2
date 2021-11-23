@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, redirect, request, url_for, session
 from random import randint, choice
+import datetime
 import database_mod
 maths_quiz_bp = Blueprint("maths_quiz", __name__,
     template_folder="templates")
 maths_quiz_db = database_mod.db("main.db","maths_quiz")
-maths_quiz_db.setup("username","percentage","score")
+maths_quiz_db.setup("username","percentage","score", "time")
 
 @maths_quiz_bp.route("/", methods=["POST","GET"])
 def maths_quiz():
@@ -20,7 +21,7 @@ def maths_quiz():
                 correct.append([x,1,request.form[x], str(eval(x))])
                 continue
             correct.append([x,0,request.form[x],str(eval(x))])
-        maths_quiz_db.insert(session["username"], score/len(correct)*100,  score) 
+        maths_quiz_db.insert(session["username"], score/len(correct)*100,  score, datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S")) 
         return render_template("challenges/maths_quiz/quiz.html", questions=correct, answers="true", score=score/len(correct)*100)
     operations = ["*","-","+"]
     min_number = 0
