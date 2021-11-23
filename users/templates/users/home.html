@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %} Users Home {% endblock %}
+
+{% block content %}
+
+<table>
+<tr><td><a href={{ url_for('users.users_delete') }}>Delete Users</a></td></tr>
+<tr><td><a href={{ url_for('user.user_update') }}>List Users</a></td></tr>
+</table>
+
+{% endblock %}

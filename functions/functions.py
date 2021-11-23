@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, request, url_for, flash, session
 import database_mod
-from info import allow_blank_passwords, hash
+from info import allow_blank_passwords, hash, get_redirect
 
 functions_bp = Blueprint("functions", __name__,
     template_folder="templates")
@@ -38,6 +38,9 @@ def login():
         if len(users_db.select_max(*session["select_args"])):
             session["logged in"] = True
             flash(f"logged in as user {username}", "info")
+            responce = get_redirect()
+            if responce is not None:
+                return redirect(responce)
             return redirect(url_for("functions.home"))
         return redirect(url_for("user.user_create"))
 

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %} User Home {% endblock %}
+
+{% block content %}
+<script src="{{ url_for('static',filename='javascript/table_sort.js') }}"></script>
+
+<table id="to_sort">
+<tr>
+    <td onclick="sort_alph(0)">Username</td>
+    <td onclick="sort_num(1)">% Score</td>
+    <td onclick="sort_num(2)">Number Score</td>
+</tr>
+{% for user in users %}
+<tr>
+    {% for item in user%}
+    <td>{{item}}</td>
+    {% endfor %}
+</tr>
+{% endfor %}
+</table>
+{% endblock %}

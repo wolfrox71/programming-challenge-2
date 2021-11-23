@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} Users Home {% endblock %}
+
+{% block content %}
+
+<table>
+
+<form method="POST" action="#">
+{% for user in users %}
+<tr>
+{% for attr in user %}
+
+<td>{{attr}}</td>
+
+{% endfor %}
+<td><input type="radio" value="{{user[0]}}¦|{{user[1]}}" name="to_del" checked> </td>
+<tr>
+{% endfor %}
+<input type="submit" value="submit">
+</form>
+</table>
+{% endblock %}

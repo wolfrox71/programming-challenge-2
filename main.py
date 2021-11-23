@@ -4,6 +4,7 @@ from database.database import database_bp
 from user.user import user_bp
 from functions.functions import functions_bp
 from challenges.challenges import challenges_bp
+from users.users import users_bp
 import database_mod
 
 app = Flask(__name__)
@@ -18,22 +19,13 @@ app.register_blueprint(database_bp, url_prefix="/database/")
 app.register_blueprint(user_bp, url_prefix="/user/")
 app.register_blueprint(functions_bp, url_prefix="/")
 app.register_blueprint(challenges_bp, url_prefix="/game/")
+app.register_blueprint(users_bp, url_prefix="/users/")
 addresses = {}
 
-def get_redirect(redirect_arg=False):
-    if "redirect" not in session:
-        session["redirect"] = None
-
-    if session["redirect"] is not None:
-        redirect = session["redirect"]
-        if redirect_arg:
-            session["redirect"] = None
-        return url_for(redirect)
-    return None
 
 @app.route("/map/")
 def game():
-    return str(app.url_map)
+    return str(app.url_map.iter_rules)
     
 if __name__ == "__main__":
     #app.run(debug=True)

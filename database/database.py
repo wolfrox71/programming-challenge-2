@@ -19,5 +19,5 @@ def database_clear():
     if request.method == "POST":
         if request.form["answer"] == "yes":
             users_db.clear()
-        return redirect(url_for("main.logout"))
+        return redirect(url_for("functions.logout"))
     return render_template("/clear.html")

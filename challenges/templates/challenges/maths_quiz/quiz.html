@@ -9,6 +9,7 @@
     <tr>
         <td>Question</td>
         <td>Your answer</td>
+        <td>Correct answer</td>
     </tr>
     {% for question in questions %}
         <tr>
@@ -20,26 +21,25 @@
             {% else %}
                 <td>{{question}}</td>
             {% endif%}
-
+            <td>{{question[3]}}</td>
         </tr>
     {% endfor %}
 </table>
 <p>You scored: {{score}}%</p>
+<a href={{url_for("challenges.maths_quiz.maths_quiz_scores")}}>Scores</a>
 {% else %}
 
-<form action="#" method="POST">
+<form autocomplete="off" action="#" method="POST">
 <table>
 
 {% for question in questions %}
 
-<tr><td>{{question}}</td><td><input type="text" name={{question}}></td></tr>
+<tr><td>{{question}}</td><td><input type="text" name={{question}} autocomplete="off"></td></tr>
 
 {% endfor %}
 
 </table>
 <input type="submit" value="submit">
 </form>
-
 {% endif %}
-
 {% endblock %}
