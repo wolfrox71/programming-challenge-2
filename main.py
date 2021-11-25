@@ -1,4 +1,4 @@
-from flask import Flask, session, url_for
+from flask import Flask
 from datetime import timedelta
 from database.database import database_bp
 from user.user import user_bp

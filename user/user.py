@@ -20,6 +20,7 @@ def user_create():
         session["select_args"] = [session["username"], 1, session["password"],2]
         
     if len(users_db.select_max(*session["select_args"])) != 0: #see if the user account already exists
+        
         flash("You are already logged in. Sign out and login to create a new account")
         return redirect(url_for("functions.home")) # return to the home page to be redirected
     
@@ -40,7 +41,7 @@ def user_create():
 @user_bp.route("/update/", methods=["POST","GET"])
 def user_update():
     if "username" not in session:
-        session["redirect"] = "user_update"
+        session["redirect"] = "user.user_update"
         return redirect(url_for("functions.login"))
     if request.method == "POST":
         new_user = list(users_db.select_max(session["username"], 1, session["password"],2)[0])
@@ -53,4 +54,6 @@ def user_update():
         users_db.update_max(session["username"],1, session["password"],2,request.form["roles"],3)
         flash(f"Successfully updated user: \'{session['username']}\' to role: \'{request.form['roles']}\'","info")
         return redirect(url_for("functions.home"))
-    return render_template("/user/update.html",roles=roles)
+    new_user = list(users_db.select_max(session["username"], 1, session["password"],2)[0])
+    current_role = new_user[2]
+    return render_template("/user/update.html",roles=roles, current_role=current_role)

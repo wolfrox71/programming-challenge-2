@@ -1,1 +1,0 @@
-add datetime.datetime.now().strftime("%y-%m-%d %H:%M:%S") to the maths quiz so that it can be sorted by date and time to sort the results easier and give latest results for each person

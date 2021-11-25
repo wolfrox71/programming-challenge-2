@@ -2,6 +2,7 @@
 {% block title %}Update User{% endblock %}
 
 {% block content %}
+<p>Current Role: {{current_role}}</p>
 <form action="#" method="POST">
     <select id="roles" name="roles">
     {% for role in roles %}
