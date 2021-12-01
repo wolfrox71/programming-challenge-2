@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %} Code Cracker {% endblock %}
+
+{% block content %}
+<style>
+input[type=number] { //only on inputs with type of number to stop the submit button from breaking
+  width: 3em; // 3* the width of 1 character
+}
+</style>
+
+<script>
+function table_show(args) {
+    const number_str = {{number}}; // get the correct value from python
+    const actual = number_str.toString().split(""); // turn the number input into an array
+    const table = document.getElementById("guesses"); // the table to have previous guesses on
+    const row = table.insertRow(0); // add a row to the table
+    var cells = [];
+    var correct = []; // have an array with the document.getElementById of each correct input to store the correct values in
+    var incorrect_count = 0;
+    for (let i=1; i<args.length+1; i++) { // i assumed this would be simpliar than hard coding values in
+        var element_name = "correct_"+i.toString(); // get each id for the inputs at the bottom
+        correct.push(document.getElementById(element_name)); // add it to the correct elements array
+    }
+    for (arg in args) {
+        cells.push(row.insertCell(0)); // add a cell to the newly created row
+    }
+    for (cell in cells) { //for some reason cell is just 0-4 so can be used as an index position
+        const current_cell = table.rows[0].cells[cell]; // to make getting the current cell easier
+        current_cell.innerHTML = args[cell]; // add the value in the cell
+        if (args[cell] == actual[cell]) { //if it is correct
+            current_cell.style.backgroundColor = "green"; // make it green
+            correct[cell].value = args[cell];  //lock in the correct value in the correct values inputs
+        } else { //if it is incorrect
+            incorrect_count ++; // add one to incorrect count
+            current_cell.style.backgroundColor = "red"; // make it red
+        }
+    }
+    if (incorrect_count == 0) { //if not values have benn incorrect so all values must be correct
+        document.getElementById("found").innerHTML = "Found"; //say that the value has been found
+        document.getElementById("guess_button").disabled = true; //disable the button so that it cannot be pressed again
+        document.getElementById("auto").hidden = true; //hide unnecessary items from the screen
+        document.getElementById("auto_swap_button").hidden = true; 
+        document.getElementById("guess_button").hidden = true;
+    }
+}
+function guess(){ //to be called on button press
+    var args = [-1,-1,-1,-1];
+    var correct = []; // have an array with the document.getElementById of each correct input to store the correct values in
+    var number_of_args = 4; // this is the default but can be changed as the values are correctly guessed 
+    
+    document.getElementById("num_of_guesses").innerHTML++; // shows how many guesses have been guessed
+    for (let i=1; i<number_of_args+1; i++) {var element_name = "correct_"+i.toString(); correct.push(document.getElementById(element_name));} // the correct values at the bottom of the page
+
+    for (var a in correct) {
+        var input = correct[a]; //a is just 0-number_of_args-1 
+        if (input.value != "") { // the value has been found
+            args[a] = input.value;
+        }
+    }
+    for (var a in args) { // get random args
+        if (args[a] == -1){ // if the value has not been already added
+            args[a] = Math.floor(Math.random() * 10);// get a random number betweeen 0 and 9 inclusive
+}
+    }
+    table_show(args); // add the new row to the table
+    
+    if (document.getElementById("found").innerHTML != "Found" && document.getElementById("auto").innerHTML != "false") {
+        guess();
+    }
+}
+
+function auto_swap(){
+    var text = document.getElementById("auto");
+    if (text.innerHTML == "true") {
+        text.innerHTML = "false";
+    } else {
+        text.innerHTML = "true";
+    }
+}
+
+Math.floor(Math.random() * 10); //just as code so i remember how to get a random number between 0 and 9
+</script>
+<button onclick="auto_swap()" id="auto_swap_button">Auto find:  <span id="auto">false</span></button>
+<br>
+<button onclick="guess()" id="guess_button">guess</button> <!-- to be pressed to guess again -->
+<h1 id="found"></h1>
+<h1 >Guesses: <span id="num_of_guesses">0</span></h1>
+<table id="guesses"> <!-- the table to be changed with js -->
+</table>
+
+<table style="width: 5%"> <!-- the correct values will be stored in these inputs -->
+    <tr>
+        <td><input type="number" id="correct_1" step="1" min="0" max="9" value="" readonly></td>
+        <td><input type="number" id="correct_2" step="1" min="0" max="9" value="" readonly></td>
+        <td><input type="number" id="correct_3" step="1" min="0" max="9" value="" readonly></td>
+        <td><input type="number" id="correct_4" step="1" min="0" max="9" value="" readonly></td>
+    </tr>
+</table>
+
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %} Code Cracker {% endblock %}
+
+{% block content %}
+<style>
+input[type=number] {
+  width: 3em;
+}
+</style>
+<p>Enter a value to guess</p>
+<form method="POST" action="#">
+<table style="width: 5%">
+    <tr>
+        <td><input type="number" name="num1" step="1" min="0" max="9" value="5"></td>
+        <td><input type="number" name="num2" step="1" min="0" max="9" value="5"></td>
+        <td><input type="number" name="num3" step="1" min="0" max="9" value="5"></td>
+        <td><input type="number" name="num4" step="1" min="0" max="9" value="5"></td>
+    </tr>
+</table>
+<input type="submit" value="submit">
+</form>
+
+
+{% endblock %}
