@@ -1,15 +1,13 @@
-{% extends "base.html" %}
-{% block title %} Code Cracker {% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %} Code Cracker {% endblock %} {% block content %}
 <style>
-input[type=number] { //only on inputs with type of number to stop the submit button from breaking
-  width: 3em; // 3* the width of 1 character
-}
+	input[type=number] {
+		//only on inputs with type of number to stop the submit button from breaking
+		width: 3em; // 3* the width of 1 character
+	}
 </style>
 
 <script>
-function table_show(args) {
+	function table_show(args) {
     const number_str = {{number}}; // get the correct value from python
     const actual = number_str.toString().split(""); // turn the number input into an array
     const table = document.getElementById("guesses"); // the table to have previous guesses on
@@ -30,6 +28,11 @@ function table_show(args) {
         if (args[cell] == actual[cell]) { //if it is correct
             current_cell.style.backgroundColor = "green"; // make it green
             correct[cell].value = args[cell];  //lock in the correct value in the correct values inputs
+            var number_of_args = Number(document.getElementById("no_args").innerHTML);
+            var user_choice = [];
+            for (let i=1; i<number_of_args+1; i++) {var element_name = "num"+i.toString(); user_choice.push(document.getElementById(element_name));} // an array of the user inmput button
+            user_choice[cell].value = args[cell]; // set the input for that value to be the correct value
+            user_choice[cell].disabled = true; //disable the input
         } else { //if it is incorrect
             incorrect_count ++; // add one to incorrect count
             current_cell.style.backgroundColor = "red"; // make it red
@@ -43,29 +46,72 @@ function table_show(args) {
         document.getElementById("guess_button").hidden = true;
     }
 }
-function guess(){ //to be called on button press
-    var args = [-1,-1,-1,-1];
-    var correct = []; // have an array with the document.getElementById of each correct input to store the correct values in
-    var number_of_args = 4; // this is the default but can be changed as the values are correctly guessed 
-    
-    document.getElementById("num_of_guesses").innerHTML++; // shows how many guesses have been guessed
-    for (let i=1; i<number_of_args+1; i++) {var element_name = "correct_"+i.toString(); correct.push(document.getElementById(element_name));} // the correct values at the bottom of the page
 
-    for (var a in correct) {
-        var input = correct[a]; //a is just 0-number_of_args-1 
-        if (input.value != "") { // the value has been found
-            args[a] = input.value;
+function computer_guess_swap() { //swaps between the computer guessing randomly and the user guessing
+    var button = document.getElementById("computer_swap_button");
+    var text = document.getElementById("computer_swap");
+    if (text.innerHTML == "true") {
+        text.innerHTML = "false";
+        var number_of_args = Number(document.getElementById("no_args").innerHTML);
+        var user_choice = [];
+        for (let i=1; i<number_of_args+1; i++) {var element_name = "num"+i.toString(); user_choice.push(document.getElementById(element_name));} // an array of the user inmput button
+        for (var choice in user_choice) { //for each user input
+            var input = user_choice[choice];
+            input.disabled = false; // enable each input
+        }
+    } else {
+        text.innerHTML = "true";
+        var number_of_args = Number(document.getElementById("no_args").innerHTML);
+        var user_choice = [];
+        for (let i=1; i<number_of_args+1; i++) {var element_name = "num"+i.toString(); user_choice.push(document.getElementById(element_name));} // an array of the user inmput button
+        for (var choice in user_choice) { //for each user input
+            var input = user_choice[choice];
+            input.disabled = true; // disable each input
         }
     }
-    for (var a in args) { // get random args
-        if (args[a] == -1){ // if the value has not been already added
-            args[a] = Math.floor(Math.random() * 10);// get a random number betweeen 0 and 9 inclusive
 }
+
+
+function guess(){ //to be called on button press
+    var computer_swap = document.getElementById("computer_swap");
+    if (computer_swap.innerHTML == "true") { //if the computer is guessing 
+        var args = [-1,-1,-1,-1];
+        var correct = []; // have an array with the document.getElementById of each correct input to store the correct values in
+        var number_of_args = Number(document.getElementById("no_args").innerHTML);; // this is the default but can be changed as the values are correctly guessed 
+        
+        document.getElementById("num_of_guesses").innerHTML++; // shows how many guesses have been guessed
+        for (let i=1; i<number_of_args+1; i++) {var element_name = "correct_"+i.toString(); correct.push(document.getElementById(element_name));} // the correct values at the bottom of the page
+
+        for (var a in correct) {
+            var input = correct[a]; //a is just 0-number_of_args-1 
+            if (input.value != "") { // the value has been found
+                args[a] = input.value;
+            }
+        }
+        for (var a in args) { // get random args
+            if (args[a] == -1){ // if the value has not been already added
+                args[a] = Math.floor(Math.random() * 10);// get a random number betweeen 0 and 9 inclusive
     }
-    table_show(args); // add the new row to the table
-    
-    if (document.getElementById("found").innerHTML != "Found" && document.getElementById("auto").innerHTML != "false") {
-        guess();
+        }
+        table_show(args); // add the new row to the table
+        
+        if (document.getElementById("found").innerHTML != "Found" && document.getElementById("auto").innerHTML != "false") {
+            guess();
+        }
+    } else if (computer_swap.innerHTML == "false") { //if the user is guessing
+        document.getElementById("num_of_guesses").innerHTML++; // shows how many guesses have been guessed
+        var args = [-1,-1,-1,-1]; 
+        var user_choice = [];
+        var number_of_args = Number(document.getElementById("no_args").innerHTML);
+        for (var i = 1; i<number_of_args+1; i++) {var element_name = "num"+i.toString(); user_choice.push(document.getElementById(element_name));} // an array of the user inmput button
+        for (var choice in user_choice) { //for each user input
+            var input = user_choice[choice];
+            args[choice] = input.value; // add that input to the args array
+        }
+        table_show(args); // add the new row to the table
+
+    } else { // if the variable is something else 
+        computer_guess_swap(); // set computer_swap to "true"
     }
 }
 
@@ -79,14 +125,33 @@ function auto_swap(){
 }
 
 Math.floor(Math.random() * 10); //just as code so i remember how to get a random number between 0 and 9
+
 </script>
+
+<p hidden id="no_args">4</p>
+
 <button onclick="auto_swap()" id="auto_swap_button">Auto find:  <span id="auto">false</span></button>
+<br>
+<button onclick="computer_guess_swap()" id="computer_swap_button">Computer Guess:  <span id="computer_swap">true</span></button>
 <br>
 <button onclick="guess()" id="guess_button">guess</button> <!-- to be pressed to guess again -->
 <h1 id="found"></h1>
 <h1 >Guesses: <span id="num_of_guesses">0</span></h1>
 <table id="guesses"> <!-- the table to be changed with js -->
 </table>
+
+</style>
+<h2>Enter a value to guess:</h2>
+<table style="width: 5%">
+    <tr>
+        <td><input type="number" id="num1" step="1" min="0" max="9" value="5"></td>
+        <td><input type="number" id="num2" step="1" min="0" max="9" value="5"></td>
+        <td><input type="number" id="num3" step="1" min="0" max="9" value="5"></td>
+        <td><input type="number" id="num4" step="1" min="0" max="9" value="5"></td>
+    </tr>
+</table>
+
+<h2>Correct values:</h2>
 
 <table style="width: 5%"> <!-- the correct values will be stored in these inputs -->
     <tr>
