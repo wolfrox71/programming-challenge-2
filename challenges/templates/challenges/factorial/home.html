@@ -1,10 +1,8 @@
-{% extends "base.html" %}
-{% block title %} Factorial {% endblock %}
-
-{% block content %}
+{% extends "base.html" %} 
+{% block title %} Factorial {% endblock %} {% block content %}
 
 <script>
-function factorial(num) {
+	function factorial(num) {
     if (num < 0) {
             return -1;
     } else if (num == 0) { 
@@ -25,9 +23,10 @@ function factorial_func(){
     output.innerHTML = factorial(Number(value));
 }
 }
+
 </script>
 
-<input id="input" type="text" onkeyup="factorial_func()" placeholder="Enter a number to factorial">
+<input autocomplete="off" id="input" type="text" onkeyup="factorial_func()" placeholder="Enter a number to factorial">
 
 <p><span id="output"></span></p>
 
