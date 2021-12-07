@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %} Caesar Cipher {% endblock %}
+
+{% block content %}
+
+<script>
+
+function caesarcipher (str,key, val) {
+    console.log(val);
+        return str.toUpperCase().replace(/[A-Z]/g, c => String.fromCharCode((val == 1) ? ((c.charCodeAt(0)+65 + key ) % 26 + 65): ((c.charCodeAt(0)+65 + (26-key)) % 26 + 65) )); //get each letter with a regex and convert it to that letter + key or 26-key for decode
+}
+/*
+function caesarcipher (str,key, rev) {
+        return str.toUpperCase().replace(/[A-Z]/g, c => String.fromCharCode((c.charCodeAt(0)-65 + key ) % 26 + 65)); //get each letter with a regex and convert it to that letter + key
+}*/
+function cipher(){
+    const val = document.querySelector('input[name="code"]:checked').value;
+    let input = document.getElementById("input");
+    let key = document.getElementById("key");
+    let output = document.getElementById("output");
+    output.innerHTML = caesarcipher(input.value, Number(key.value),val);
+}
+
+
+</script>
+
+<input id="input" type="text" autocomplete="off" placeholder="Enter your text" onkeyup="cipher()"></input>
+<input id="key" type="number" min="0" max="26" step="1" value="1" onclick="cipher()"></input>
+<input type="radio" name="code" value="1" checked onclick="cipher()">Encode</input>
+<input type="radio" name="code" value="-1" onclick="cipher()"> Decode</input>
+<p>Output: <span id="output"></span></p>
+
+{% endblock %}
