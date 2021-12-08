@@ -4,6 +4,7 @@ from challenges.maths_quiz import maths_quiz_bp
 from challenges.factorial import factorial_bp
 from challenges.code_cracker import code_cracker_bp
 from challenges.caesar_cipher import caesar_cipher_bp
+from challenges.reverse_it import reverse_it_bp
 
 challenges_bp = Blueprint("challenges", __name__,
     template_folder="templates")
@@ -15,7 +16,7 @@ challenges_bp.register_blueprint(maths_quiz_bp, url_prefix="/maths_quiz/")
 challenges_bp.register_blueprint(factorial_bp, url_prefix="/factorial/")
 challenges_bp.register_blueprint(code_cracker_bp, url_prefix="/code_cracker/")
 challenges_bp.register_blueprint(caesar_cipher_bp, url_prefix="/caesar_cipher/")
-
+challenges_bp.register_blueprint(reverse_it_bp, url_prefix="/reverse_it/")
 
 @challenges_bp.route("/")
 def home():

@@ -4,8 +4,11 @@ import datetime
 import database_mod
 maths_quiz_bp = Blueprint("maths_quiz", __name__,
     template_folder="templates")
+
+
 maths_quiz_db = database_mod.db("main.db","maths_quiz")
 maths_quiz_db.setup("username","percentage","score", "time")
+
 
 @maths_quiz_bp.route("/", methods=["POST","GET"])
 def maths_quiz():

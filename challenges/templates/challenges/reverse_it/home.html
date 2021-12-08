@@ -1,0 +1,33 @@
+{% extends "base.html" %} 
+{% block title %} Reverse It {% endblock %}
+{% block content %}
+
+<script>
+function count(){
+    var input = document.getElementById("input");
+    var output = document.getElementById("output");
+    var consonants = document.getElementById("consonants");
+    var palandrome = document.getElementById("palandrome");
+    var vowels = document.getElementById("vowels");
+    var reverse_str = input.value.split("").reverse().join(""); //turn the input into an array, reverse it, then turn it back into a string
+    
+    output.innerHTML = reverse_str; //set the output to the reverse of the string
+
+    consonants_regex = new RegExp("[bcdfghjklmnpqrstvwxyz]", "g"); //regex with consonants
+    vowels_regex = new RegExp("[aeiou]", "g"); // regex with vowles
+
+    palandrome.innerHTML = (reverse_str == input.value) ? "true" : "false"; // if to input is the same forwards as backwards, its a palandrome
+    vowels.innerHTML = vowels_regex.test(reverse_str) ? reverse_str.match(vowels_regex).length : 0; // see if the input has vowels in it, set vowels_ouput to the ammount, if not set to 0
+    consonants.innerHTML = consonants_regex.test(reverse_str) ? reverse_str.match(consonants_regex).length : 0; // if the input has consonants in it, return the ammount of consonants, if return 0
+    //vowels.innerHTML = reverse_str.match(new RegExp("[aeiou]", "g")) || []).length;
+
+}
+</script>
+
+<input id="input" type="text" placeholder="Enter text:" onkeyup="count()" autocomplete="off"></input>
+<p>Output: <span id="output"></span></p>
+<p>Palandrome: <span id="palandrome"></span></p>
+<p>Consonants: <span id="consonants"></span></p>
+<p>Vowels: <span id="vowels"></span></p>
+
+{% endblock %}

@@ -6,8 +6,7 @@
 <script>
 
 function caesarcipher (str,key, val) {
-    console.log(val);
-        return str.toUpperCase().replace(/[A-Z]/g, c => String.fromCharCode((val == 1) ? ((c.charCodeAt(0)+65 + key ) % 26 + 65): ((c.charCodeAt(0)+65 + (26-key)) % 26 + 65) )); //get each letter with a regex and convert it to that letter + key or 26-key for decode
+    return str.toUpperCase().replace(/[A-Z]/g, c => String.fromCharCode((val == 1) ? ((c.charCodeAt(0)+65 + key ) % 26 + 65): ((c.charCodeAt(0)+65 + (26-key)) % 26 + 65) )); //get each letter with a regex and convert it to that letter + key or 26-key for decode
 }
 /*
 function caesarcipher (str,key, rev) {
