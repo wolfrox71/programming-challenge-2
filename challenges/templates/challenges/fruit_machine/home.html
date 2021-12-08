@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %} Fruit Machine {% endblock %}
+
+{% block content %}
+
+<style>
+td {
+    width: 3em; // 3* the width of 1 character
+}
+span[type=output] {
+    width: 3em; // 3* the width of 1 character
+}
+</style>
+<script>
+const starting_money = 100;
+const symbols = ["Cherry", "Bell", "Lemon", "Orange", "Star", "Skull"];
+const round_cost = -20;
+const two_same = 50;
+const three_same = 100;
+const three_bells = 500;
+const two_skulls = -100;
+const three_skulls = -1000000000000;
+var money = starting_money;
+function random(arr) {
+    return arr[Math.floor(Math.random()*arr.length)]
+}
+
+function roll(){
+    const money_output = document.getElementById("money"); //money output box 
+    money += round_cost; //deducting the cost of a round (cost is neg so +=)
+    money_output.innerHTML = money; // set the value of the money output box to the money the user has
+    const outputs = [document.getElementById("output1"),document.getElementById("output2"),document.getElementById("output3")]; //arr of the output boxes
+    var items_rolled = []; // arr of each item rolled 
+    var counts = {} //dict of each item and its frequency
+    for (let i = 0; i<outputs.length; i++) { // so each output
+        let item = random(symbols); // set item to a random symbol
+        items_rolled.push(item); // add the symbol to items_rolled arr
+        outputs[i].innerHTML = item; // output each item to its output
+    }
+    
+    for (const item of items_rolled) { // for each item rolled
+        counts[item] = counts[item] ? counts[item] +1 : 1; // if the item exists add 1 else set it to 1
+    }
+
+    for (const count in symbols) {
+        const symbol = symbols[count];
+        if (counts[symbol] !== undefined) {
+            console.log(counts[symbol],symbol, counts);
+            switch (counts[symbol]) {
+                case 1:
+                    console.log(` 1 ${symbol}`);
+                    continue;
+                case 2: //if they get 2 of a symbol
+                    switch (symbol){
+                        case "Skull": //if they roll 2 skulls
+                            console.log("2 skull");
+                            money += two_skulls; //deduct points for 2 skulls
+                            continue;
+
+                        default: //if the roll two others
+                            money += two_same; //add the winnings
+                            console.log(`2 others ,${symbol}`);
+                            continue;
+                    } 
+                case 3:
+                    switch (symbol){
+                        case "Skull": //if they roll 3 skulls
+                            money += three_skulls; //deduct points for 2 skulls
+                            console.log("3 skulls");
+                            continue;
+
+                        case "Bell": //if they roll 3 bells
+                            money += three_bells; // add the reward for 3 bells
+                            console.log("3 bells");
+                            continue;
+
+                        default: // if the roll 3 of anything else
+                            money += three_same; // add the reward for 3 of the the same
+                            console.log(`3 same, ${symbol}`);
+                            continue;
+                    }
+                default: //incase something goes wrong
+                    money += 0; //do nothing
+                    console.log("other");
+                    continue;
+                    
+                }
+            }
+            else {
+                //console.log(`nothing ${symbol}`);
+            }
+        }
+    money_output.innerHTML = money; 
+    if (money < 0) { //if the user does not have enough money to role again
+        document.getElementById("roll_button").hidden = true; //hide the roll button
+    }
+}
+</script>
+
+
+<div id="topbar">
+    <h1>Money: <span id="money">100</span></h1>
+</div> 
+
+<button onclick="roll()" id="roll_button">Roll</button>
+
+<div id="output_div">
+<h1>Output:</h1>
+<table>
+    <tr>
+        <td>1:<span type="output" id="output1"></span></td>
+        <td>2:<span type="output" id="output2"></span></td>
+        <td>3:<span type="output" id="output3"></span></td>
+    </tr>
+</table>
+</div>
+
+{% endblock %}
