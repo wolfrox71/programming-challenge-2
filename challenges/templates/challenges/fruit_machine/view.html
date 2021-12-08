@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %} Fruit Machine Scores {% endblock %}
+
+{% block content %}
+<script src="{{ url_for('static',filename='javascript/table_sort.js') }}"></script>
+<script src="{{ url_for('static',filename='javascript/table_search.js') }}"></script>
+<input type="text" onkeyup="table_search()" id="search_box" placeholder="Search for users">
+<table id="sort_table_id">
+<tr>
+    <td onclick="sort_alph(0)">Username</td>
+    <td onclick="sort_num(1)"> Money</td>
+</tr>
+{% for score in scores %}
+<tr>
+    {% for attr in score%}
+    <td>{{attr}}</td>
+    {% endfor %}
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
