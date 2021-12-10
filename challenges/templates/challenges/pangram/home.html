@@ -1,0 +1,30 @@
+{% extends "base.html" %} 
+{% block title %} Pangram checker {% endblock %}
+{% block content %}
+
+<script>
+function check(){
+    const input = document.getElementById("input");
+    const output = document.getElementById("output");
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    const inputted_str = input.value;
+    var counts = {};
+    var letters = 0;
+    for (const letter of inputted_str) { // for each letter in the string
+        counts[letter] = counts[letter] ? counts[letter] +1 : 1; // if the letter exists add 1 else set it to 1
+    }
+
+    for (const letter of alphabet) {
+        if (counts[letter] !== undefined) {
+            letters++;
+        }
+    }
+    output.innerHTML = (letters==alphabet.length) ? "It is a pangram" : `You only included ${letters} letters`;
+
+}
+</script>
+
+<input id="input" type="text" placeholder="Enter text:" onkeyup="check()" autocomplete="off"></input>
+<p><span id="output"></span></p>
+
+{% endblock %}
