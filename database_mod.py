@@ -25,7 +25,8 @@ class db:
     def insert(self,*args):
         self.to_write = f"INSERT INTO {self.table} VALUES ("
         for i in range(len(args)):
-            self.to_write += f"\"{str(args[i])}\""
+            self.add = str(args[i]).replace("\"","'")
+            self.to_write += f"\"{self.add}\""
             if i != len(args)-1:
                 self.to_write += ","
         self.to_write += ")"
@@ -45,47 +46,60 @@ class db:
         self.conn.commit()
 
     def remove(self,value, column_number):
+        value = value.replace("\"","''")
         self.to_write = f"DELETE FROM {self.table} WHERE "
-        self.to_write += f"{self.columns()[column_number-1]} = '{value}'"
+        self.to_write += f"{self.columns()[column_number-1]} = \"{value}\""
         self.c.execute(self.to_write)
         self.conn.commit()
 
     def remove_max(self,value, column_number,value2, column_number2):
+        value = value.replace("\"","''")
+        value2 = value2.replace("\"","'")
         self.to_write = f"DELETE FROM {self.table} WHERE "
-        self.to_write += f"{self.columns()[column_number-1]} = '{value}' AND {self.columns()[column_number2-1]} = '{value2}'"
+        self.to_write += f"{self.columns()[column_number-1]} = \"{value}\" AND {self.columns()[column_number2-1]} = \"{value2}\""
+        print(self.to_write)
         self.c.execute(self.to_write)
-        #print(self.to_write)
         self.conn.commit()
-        return self.c.fetchall()
     
     def select(self,value, column_number):
+        value = value.replace("\"","''")
         self.to_write = f"SELECT * FROM {self.table} WHERE "
-        self.to_write += f"{self.columns()[column_number-1]} = '{value}'"
+        self.to_write += f"{self.columns()[column_number-1]} = \"{value}\""
         self.c.execute(self.to_write)
         #print(self.to_write)
         self.conn.commit()
         return self.c.fetchall()
     
     def select_max(self,value, column_number,value2, column_number2):
+        value = value.replace("\"","''")
+        value2 = value2.replace("\"","'")
+
         self.to_write = f"SELECT * FROM {self.table} WHERE "
-        self.to_write += f"{self.columns()[column_number-1]} = '{value}' AND {self.columns()[column_number2-1]} = '{value2}'"
+        self.to_write += f"{self.columns()[column_number-1]} = \"{value}\" AND {self.columns()[column_number2-1]} = \"{value2}\""
         self.c.execute(self.to_write)
-        #print(self.to_write)
+        print(self.to_write)
         self.conn.commit()
         return self.c.fetchall()
 
     def update_max(self, condition_1, condition_1_column_number, condition_2, condition_2_column_number, value, column_number):
+        value = value.replace("\"","''")
+        condition_1 = condition_1.replace("\"","'")
+        condition_2 = condition_2.replace("\"","''")
         self.to_write = f"UPDATE {self.table} "
-        self.to_write += f"SET {self.columns()[column_number-1]} = '{value}' "
-        self.to_write += f"WHERE {self.columns()[condition_1_column_number-1]} = '{condition_1}' AND {self.columns()[condition_2_column_number-1]} = '{condition_2}' "
+        self.to_write += f"SET {self.columns()[column_number-1]} = \"{value}\" "
+        self.to_write += f"WHERE {self.columns()[condition_1_column_number-1]} = \"{condition_1}\" AND {self.columns()[condition_2_column_number-1]} = \"{condition_2}\" "
         self.c.execute(self.to_write)
         self.conn.commit()
 
     def update_two_val_two_cond(self, condition_1, condition_1_column_number, condition_2, condition_2_column_number, value, column_number, value2, column_number2):
+        value = value.replace("\"","'")
+        value2 = value.replace("\"","'")
+        condition_1 = condition_1.replace("\"","'")
+        condition_2 = condition_2.replace("\"","''")
         self.to_write = f"UPDATE {self.table} "
-        self.to_write += f"SET {self.columns()[column_number-1]} = '{value}', "
-        self.to_write += f"{self.columns()[column_number2-1]} = '{value2}'"
-        self.to_write += f"WHERE {self.columns()[condition_1_column_number-1]} = '{condition_1}' AND {self.columns()[condition_2_column_number-1]} = '{condition_2}' "
+        self.to_write += f"SET {self.columns()[column_number-1]} = \"{value}\", "
+        self.to_write += f"{self.columns()[column_number2-1]} = \"{value2}\""
+        self.to_write += f"WHERE {self.columns()[condition_1_column_number-1]} = \"{condition_1}\" AND {self.columns()[condition_2_column_number-1]} = \"{condition_2}\" "
         self.c.execute(self.to_write)
         self.conn.commit()
 
