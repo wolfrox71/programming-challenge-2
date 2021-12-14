@@ -14,10 +14,10 @@ def user_home():
 
 @users_bp.route("/delete/",methods=["POST","GET"])
 def users_delete():
-    if "username" not in session: #if the user is not logged in
+    if "username" not in session or "role" not in session: #if the user is not logged in
         session["redirect"] = "users.users_delete" #make the user return to this page when they have logged in
         return redirect(url_for("functions.login")) #send them to login
-    if users_db.select_max(*session["select_args"])[0][2] not in admin_roles: #if the user is not an admin
+    if session["role"] not in admin_roles: #if the user is not an admin
         flash("Need to be admin")
         return redirect(url_for("functions.home")) #send them to the home page
     

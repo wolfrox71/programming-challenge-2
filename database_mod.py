@@ -81,6 +81,14 @@ class db:
         self.c.execute(self.to_write)
         self.conn.commit()
 
+    def update_two_val_two_cond(self, condition_1, condition_1_column_number, condition_2, condition_2_column_number, value, column_number, value2, column_number2):
+        self.to_write = f"UPDATE {self.table} "
+        self.to_write += f"SET {self.columns()[column_number-1]} = '{value}', "
+        self.to_write += f"{self.columns()[column_number2-1]} = '{value2}'"
+        self.to_write += f"WHERE {self.columns()[condition_1_column_number-1]} = '{condition_1}' AND {self.columns()[condition_2_column_number-1]} = '{condition_2}' "
+        self.c.execute(self.to_write)
+        self.conn.commit()
+
     def clear(self):
         self.c.execute(f"DELETE FROM {self.table}")
         self.conn.commit()

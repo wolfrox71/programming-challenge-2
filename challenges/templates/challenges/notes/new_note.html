@@ -1,0 +1,34 @@
+{% extends "base.html" %} 
+{% block title %} New Note {% endblock %}
+{% block content %}
+<script>
+    /*
+function divide() {
+    var txt;
+    txt = document.getElementById('return_text').value;
+    var text = txt.split(".");
+    var str = text.join('.</br>');
+    document.write(str);
+} */
+</script>
+
+<form method="POST" action="#">
+<label for="title">Title: </label>
+<input type="text" id="title" name="title" value="" required placeholder="Title for the document">
+<br>
+<label for="return_text">Data: </label>
+
+<textarea style="white-space: pre-wrap;" rows="10" cols="60" type="text" id="return_text" name="return_text" value="" required></textarea>
+<br>
+<input type="submit" value="save" onclick="divide()"></input>
+</form>
+
+<script>
+const current_note = {{ text|safe }};
+const title = document.getElementById("title");
+title.value = current_note[1];
+var main = document.getElementById("return_text");
+main.value = current_note[2];
+</script>
+
+{% endblock%}

@@ -1,0 +1,4 @@
+fix the notes section so that the text appears in the read notes section
+add an edit to notes -> get the input back from the notes read and update the database
+test with more than 1 note -> Lorem ipsum
+                            -> also try with new lines to make sure they are correctly saving

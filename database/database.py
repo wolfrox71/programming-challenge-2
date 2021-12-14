@@ -13,10 +13,10 @@ def database_home():
 
 @database_bp.route("/list/")
 def database_list():
-    if "username" not in session:
+    if "username" not in session or "role" not in session:
         session["redirect"] = "database.database_list"
         return redirect(url_for("functions.login"))
-    if users_db.select_max(*session["select_args"])[0][2] not in admin_roles: #if the user is not an admin
+    if session["role"] not in admin_roles: #if the user is not an admin
         flash("Need to be admin")
         return redirect(url_for("functions.home")) #send them to the home page
     return render_template("/database/list.html",users=users_db.read(), headings=users_db.columns())

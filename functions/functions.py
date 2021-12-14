@@ -12,6 +12,9 @@ users_db.setup("username","password", "role")
 def home():
     if "username" in session:
         session["select_args"] = [session["username"], 1, session["password"],2]
+        if "role" not in session:
+            session["role"] = users_db.select_max(*session["select_args"])[0][2]
+    
         return render_template("menu/home.html")
     return redirect(url_for("functions.login"))
 
@@ -34,10 +37,13 @@ def login():
         session["password"] = hash(password)
         if "select_args" not in session:
             session["select_args"] = [session["username"], 1, session["password"],2]
-        
+
         if len(users_db.select_max(*session["select_args"])):
             session["logged in"] = True
             flash(f"logged in as user {username}", "info")
+            if "role" not in session:
+                session["role"] = users_db.select_max(*session["select_args"])[0][2]
+
             responce = get_redirect()
             if responce is not None:
                 return redirect(responce)
