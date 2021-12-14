@@ -93,13 +93,14 @@ class db:
 
     def update_two_val_two_cond(self, condition_1, condition_1_column_number, condition_2, condition_2_column_number, value, column_number, value2, column_number2):
         value = value.replace("\"","'")
-        value2 = value.replace("\"","'")
+        value2 = value2.replace("\"","'")
         condition_1 = condition_1.replace("\"","'")
         condition_2 = condition_2.replace("\"","''")
         self.to_write = f"UPDATE {self.table} "
         self.to_write += f"SET {self.columns()[column_number-1]} = \"{value}\", "
-        self.to_write += f"{self.columns()[column_number2-1]} = \"{value2}\""
+        self.to_write += f"{self.columns()[column_number2-1]} = \"{value2}\" "
         self.to_write += f"WHERE {self.columns()[condition_1_column_number-1]} = \"{condition_1}\" AND {self.columns()[condition_2_column_number-1]} = \"{condition_2}\" "
+        print(self.to_write)
         self.c.execute(self.to_write)
         self.conn.commit()
 
