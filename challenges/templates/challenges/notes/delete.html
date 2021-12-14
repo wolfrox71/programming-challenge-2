@@ -1,5 +1,5 @@
 {% extends "base.html" %} 
-{% block title %} Notes Home {% endblock %}
+{% block title %} Delete Note {% endblock %}
 {% block content %}
 
 <script>
@@ -12,28 +12,23 @@ function view_notes(){
 
 <script src="{{ url_for('static',filename='javascript/table_sort.js') }}"></script> <!-- sorts the table by clicking on the title -->
 <script src="{{ url_for('static',filename='javascript/table_search.js') }}"></script> <!-- adds a search bar for users -->
-<a href={{ url_for('challenges.notes.new_note') }}>Add new note</a> <!--A link to the new note page-->
-<br>
-<a href={{ url_for('challenges.notes.delete') }}>Delete a note</a> <!--A link to the new note page-->
-<br>
 <input type="text" onkeyup="table_search()" id="search_box" placeholder="Search for users"> <!-- limits the notes to a specific users -->
-
 <form method="POST" action="#"> <!-- so that the selected note can be got-->
-<input type="radio" value="¦|" name="picked_note" checked hidden> <!-- so that the input doesnt crash when no input is selected -->
+<input type="radio" value="¦|" name="note_to_del" checked hidden> <!-- so that the input doesnt crash when no input is selected -->
 <table id="sort_table_id"> <!-- the id is for the table sort and table search javascipt -->
-<input type="submit" value="Go to note">
+<input type="submit" value="Delete the note">
 <tr>
     <td onclick="sort_alph(0)">Username</td>
     <td onclick="sort_alph(1)">Title</td> <!-- sort alph is for alphabetical sort and the unmber is table column -->
     <td onclick="sort_alph(2)">Body</td> <!-- the functions are from the table_sort.js file -->
-    <td>Link</td>
+    <td></td>
 </tr>
 {% for note in notes %} <!-- for each note -->
 <tr> <!-- add each note on a new line -->
     <td>{{note[0]}}</td> <!-- add the note author -->
     <td>{{note[1]}}</td> <!-- add the note title -->
     <td>{{note[2]}}</td> <!-- add the notes content -->
-    <td><input type="radio" value="{{note[0]}}¦|{{note[1]}}" name="picked_note"> </td> <!-- adds an input with the username and title of the note to get -->
+    <td><input type="radio" value="{{note[0]}}¦|{{note[1]}}" name="note_to_del"> </td> <!-- adds an input with the username and title of the note to get -->
 </tr>
 {% endfor %} 
 </table>

@@ -8,7 +8,7 @@ notes_bp = Blueprint("notes", __name__,
 notes_db = database_mod.db("main.db","notes") #set where the database is reading from
 notes_db.setup("username","title","note","password") #set up the columns in the database
 
-
+@notes_bp.route("/view/", methods=["POST","GET"])
 @notes_bp.route("/", methods=["POST","GET"])
 def home():
     if "username" not in session: #if the user is not logged in
@@ -24,13 +24,13 @@ def home():
             flash("An error occured loading that note", "Error") #this may happen if a note is deleted by one user and another is trying to load it
             return redirect(url_for("challenges.notes.home")) # reload the page
         session["current_note"] = list(note[0]) # get it from the database
-        return redirect(url_for("challenges.notes.view")) #redirect to the viewing page
+        return redirect(url_for("challenges.notes.read")) #redirect to the reading page
     if session["role"] in admin_roles: # if the user is an admin
         return render_template("challenges/notes/home.html", notes=notes_db.read()) # get notes from all users
     return render_template("challenges/notes/home.html", notes=notes_db.select(session["username"],1)) #load the home page
 
-@notes_bp.route("/view/", methods=["POST","GET"])
-def view():
+@notes_bp.route("/read/", methods=["POST","GET"])
+def read():
     if "current_note" not in session: #if the user has not picked a text to edit
         return redirect(url_for("challenges.notes.home")) #send them to the home page to pick
     if request.method == "POST":
@@ -51,3 +51,19 @@ def new_note():
         notes_db.insert(session["username"], title, note_text, "") #save it to the database
         return redirect(url_for("challenges.notes.home"))#return to the homepage
     return render_template("challenges/notes/new_note.html") #load the page
+
+@notes_bp.route("/delete/", methods=["POST","GET"])
+def delete():
+    if "username" not in session or "role" not in session:
+        session["redirect"] = "challenges.notes.delete"
+        return redirect(url_for("functions.login"))
+    if request.method == "POST":
+        username, title = request.form["note_to_del"].split("¦|") 
+        if "" in [username]:# this is so that the database does not break
+            flash("Select a note", "info") #send a message to stop the user sending a blank input again
+            return redirect(url_for("challenges.notes.delete")) #reload the page
+        notes_db.remove_max(username,1,title,2)
+        return redirect(url_for("challenges.notes.home"))
+    if session["role"] in admin_roles:
+        return render_template("challenges/notes/delete.html", notes=notes_db.read())
+    return render_template("challenges/notes/delete.html", notes=notes_db.select(session["username"],1))
