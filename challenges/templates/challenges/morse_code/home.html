@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %} Morse Code {% endblock %}
+
+{% block content %}
+
+<script>
+conversion = {
+    "A":".-",
+    "B":"-...",
+    "C":"-.-.",
+    "D":"-..",
+    "E":".",
+    "F":"..-.",
+    "G":"--.",
+    "H":"....",
+    "I":"..",
+    "J":".---",
+    "K":"-.-",
+    "L":".-..",
+    "M":"--",
+    "N":"-.",
+    "O":"---",
+    "P":".--.",
+    "Q":"--.-",
+    "R":".-.",
+    "S":"...",
+    "T":"-",
+    "U":"..-",
+    "V":"...-",
+    "W":".--",
+    "X":"-..-",
+    "Y":"-.--",
+    "Z":"--..",
+    "1":".----",
+    "2":"..---",
+    "3":"...--",
+    "4":"....-",
+    "5":".....",
+    "6":"-....",
+    "7":"--...",
+    "8":"---..",
+    "9":"----.",
+    "0":"-----",
+    " ":" "
+}
+
+function convert(){
+    const input_value = document.getElementById("input_box").value;
+    const output = document.getElementById("output_box");
+    output.innerHTML = "";
+    for (const letter of input_value) {
+        if (conversion[letter.toUpperCase()] !== undefined) {
+            output.innerHTML = output.innerHTML + conversion[letter.toUpperCase()] + "|";
+        } else {
+            output.innerHTML = output.innerHTML + letter.toUpperCase() + "|";
+        }
+    } 
+}
+
+</script>
+
+<input id="input_box" onkeyup="convert()"></input>
+<p>Output:<span id="output_box"></span></p>
+
+{% endblock %}
