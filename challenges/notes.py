@@ -33,13 +33,15 @@ def home():
 def read():
     if request.method == "POST":
         if "username" not in session:
-            print("run")
             title = request.form["title"] 
             note_text = request.form["return_text"] #this is so that if the user logs out while writing a document it saves it with the username "logged out"
             notes_db.insert("logged out edit", title, note_text, "") #save it with the username "logged out"
             session["redirect"] = "challenges.notes.read"
             return redirect(url_for("functions.login"))
+        
         notes_db.update_two_val_two_cond(session["current_note"][0],1, session["current_note"][1],2, request.form["title"],2, request.form["return_text"],3)
+        if session["role"] in admin_roles:
+            notes_db.update_max(request.form["return_text"],3, request.form["title"],2, request.form["author"],1)
         return redirect(url_for("challenges.notes.home"))
     if "current_note" not in session: #if the user has not picked a text to edit
         return redirect(url_for("challenges.notes.home")) #send them to the home page to pick
@@ -50,8 +52,6 @@ def new_note():
     if request.method == "POST": # if the user has returned the form to save the page
         title = request.form["title"] #get the users title
         note_text = request.form["return_text"] #get the users text
-        print(note_text) #print to check formatting
-
         if "username" not in session: #if the user is not logged in
             notes_db.insert("logged out", title, note_text, "") #save it with the username "logged out"
             return redirect(url_for("challenges.notes.home"))#return to the homepage
@@ -63,7 +63,7 @@ def new_note():
     if "username" not in session: #if the user is not logged in
         session["redirect"] = "challenges.notes.new_note" #set the return address
         return redirect(url_for("functions.login")) #send the user to the login page
-    return render_template("challenges/notes/new_note.html") #load the page
+    return render_template("challenges/notes/new_note.html",text=["","",""]) #load the page
 
 @notes_bp.route("/delete/", methods=["POST","GET"])
 def delete():

@@ -16,6 +16,9 @@ function divide() {
 <label for="title">Title: </label>
 <input type="text" id="title" name="title" value="" required placeholder="Title for the document">
 <br>
+<label for="author" id="author_label">Author: </label>
+<input type="text" id="author" name="author" value="" required placeholder="Author of the document">
+<br id="author_label">
 <label for="return_text">Data: </label>
 
 <textarea style="white-space: pre-wrap;" rows="10" cols="60" type="text" id="return_text" name="return_text" value="" required></textarea>
@@ -23,12 +26,30 @@ function divide() {
 <input type="submit" value="save" onclick="divide()"></input>
 </form>
 
+
 <script>
-const current_note = {{ text|safe }};
 const title = document.getElementById("title");
-title.value = current_note[1];
-var main = document.getElementById("return_text");
-main.value = current_note[2];
+const main = document.getElementById("return_text");
+const author = document.getElementById("author");
+if ("{{ url_for('challenges.notes.read') }}".split("/notes/")[1] == window.location.href.split("/notes/")[1].split("#")[0]) { // if the user is on the edit page not the new notes page
+    try {
+    const current_note = {{ text|safe }};    
+    author.value = current_note[0];
+    title.value = current_note[1];
+    main.value = current_note[2];
+    }
+    catch {}
+}
+else {
+    try {
+    const author_label = document.getElementById("author_label");
+    author.hidden = true;
+    author_label.hidden = true;
+    }
+    catch {}
+}
+
+
 </script>
 
 {% endblock%}

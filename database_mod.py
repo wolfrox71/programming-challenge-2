@@ -57,7 +57,6 @@ class db:
         value2 = value2.replace("\"","'")
         self.to_write = f"DELETE FROM {self.table} WHERE "
         self.to_write += f"{self.columns()[column_number-1]} = \"{value}\" AND {self.columns()[column_number2-1]} = \"{value2}\""
-        print(self.to_write)
         self.c.execute(self.to_write)
         self.conn.commit()
     
@@ -66,7 +65,6 @@ class db:
         self.to_write = f"SELECT * FROM {self.table} WHERE "
         self.to_write += f"{self.columns()[column_number-1]} = \"{value}\""
         self.c.execute(self.to_write)
-        #print(self.to_write)
         self.conn.commit()
         return self.c.fetchall()
     
@@ -77,7 +75,6 @@ class db:
         self.to_write = f"SELECT * FROM {self.table} WHERE "
         self.to_write += f"{self.columns()[column_number-1]} = \"{value}\" AND {self.columns()[column_number2-1]} = \"{value2}\""
         self.c.execute(self.to_write)
-        print(self.to_write)
         self.conn.commit()
         return self.c.fetchall()
 
@@ -100,7 +97,6 @@ class db:
         self.to_write += f"SET {self.columns()[column_number-1]} = \"{value}\", "
         self.to_write += f"{self.columns()[column_number2-1]} = \"{value2}\" "
         self.to_write += f"WHERE {self.columns()[condition_1_column_number-1]} = \"{condition_1}\" AND {self.columns()[condition_2_column_number-1]} = \"{condition_2}\" "
-        print(self.to_write)
         self.c.execute(self.to_write)
         self.conn.commit()
 
