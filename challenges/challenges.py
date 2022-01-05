@@ -9,6 +9,7 @@ from challenges.fruit_machine import fruit_machine_bp
 from challenges.pangram import pangram_bp
 from challenges.notes import notes_bp
 from challenges.morse_code import morse_code_bp
+from challenges.csv_reader import csv_reader_bp
 
 challenges_bp = Blueprint("challenges", __name__,
     template_folder="templates")
@@ -25,6 +26,7 @@ challenges_bp.register_blueprint(fruit_machine_bp, url_prefix="/fruit_machine/")
 challenges_bp.register_blueprint(pangram_bp, url_prefix="/pangram/")
 challenges_bp.register_blueprint(notes_bp, url_prefix="/notes/")
 challenges_bp.register_blueprint(morse_code_bp, url_prefix="/morse_code/")
+challenges_bp.register_blueprint(csv_reader_bp, url_prefix="/csv_reader/")
 
 @challenges_bp.route("/")
 def home():

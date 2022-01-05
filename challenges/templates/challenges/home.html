@@ -4,7 +4,7 @@
 {% block content %}
 
 <table>
-
+<h1> These are working
 <tr><td><a href={{ url_for('challenges.maths_quiz.maths_quiz') }}>Maths Quiz</a></td></tr>
 <tr><td><a href={{ url_for('challenges.factorial.home') }}>Factorial</a></td></tr>
 <tr><td><a href={{ url_for('challenges.code_cracker.home') }}>Code Cracker</a></td></tr>
@@ -14,7 +14,11 @@
 <tr><td><a href={{ url_for('challenges.pangram.home') }}>Pangram Checker</a></td></tr>
 <tr><td><a href={{ url_for('challenges.notes.home') }}>Notes</a></td></tr>
 <tr><td><a href={{ url_for('challenges.morse_code.home') }}>Morse Code</a></td></tr>
-
 </table>
 
+<table>
+<h1>These are not</h1>
+<tr><td><a href={{ url_for('challenges.csv_reader.home') }}>CSV Reader</a></td></tr>
+
+</table>
 {% endblock %}

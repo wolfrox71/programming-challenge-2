@@ -1,2 +1,0 @@
-add a update author to the notes section
-its at the bottom of the notes.py file so far
