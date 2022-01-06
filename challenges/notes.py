@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, url_for, request, redirect, flash
 import database_mod
-from info import admin_roles
+from info import admin_roles, hash
 
 notes_bp = Blueprint("notes", __name__,
     template_folder="templates")
@@ -23,11 +23,33 @@ def home():
         if len(note) == 0: # if there is no notes with those catagories
             flash("An error occured loading that note", "Error") #this may happen if a note is deleted by one user and another is trying to load it
             return redirect(url_for("challenges.notes.home")) # reload the page
+        a = 1
+        var = (a==2) if "test" else "something"
+        return str(var)
+        session["note_password"] = [True, False][notes_db.select_max(username,1, title, 2)[0][-1] == ""] # true if the note is password protected, False if not
         session["current_note"] = list(note[0]) # get it from the database
+        if session["note_password"]:
+            return redirect(url_for("challenges.notes.password"))
         return redirect(url_for("challenges.notes.read")) #redirect to the reading page
+    
     if session["role"] in admin_roles: # if the user is an admin
         return render_template("challenges/notes/home.html", notes=notes_db.read()) # get notes from all users
     return render_template("challenges/notes/home.html", notes=notes_db.select(session["username"],1)) #load the home page
+
+@notes_bp.route("/password/", methods=["POST","GET"])
+def password():
+    if request.method == "POST":
+        return str(request.form)
+        if request.form["password"] == notes_db.select_max(session["current_note"][0],1, session["current_note"][1], 2)[0][-1]:
+            return redirect(url_for("challenges.notes.read"))
+
+    return """
+    <form type="POST" action="#">
+    <input type="password">Enter your password</input>
+    <br>
+    <input type="submit"></input>
+    </form>
+    """
 
 @notes_bp.route("/read/", methods=["POST","GET"])
 def read():
@@ -39,7 +61,9 @@ def read():
             session["redirect"] = "challenges.notes.read"
             return redirect(url_for("functions.login"))
         
+        notes_db.update_max(session["curretn_note"][0],1, session["current_note"][1], 2, hash(request.form["password"])) #update the password and hash it. The password is not checked apart from accessing it so is updated first
         notes_db.update_two_val_two_cond(session["current_note"][0],1, session["current_note"][1],2, request.form["title"],2, request.form["return_text"],3)
+        notes_db.update_max(request.form["return_text"],3, request.form["title"],2, request.form["author"],1)
         if session["role"] in admin_roles:
             notes_db.update_max(request.form["return_text"],3, request.form["title"],2, request.form["author"],1)
         return redirect(url_for("challenges.notes.home"))
@@ -52,12 +76,13 @@ def new_note():
     if request.method == "POST": # if the user has returned the form to save the page
         title = request.form["title"] #get the users title
         note_text = request.form["return_text"] #get the users text
+        password = hash(request.form["password"])
         if "username" not in session: #if the user is not logged in
-            notes_db.insert("logged out", title, note_text, "") #save it with the username "logged out"
+            notes_db.insert("logged out", title, note_text, "") #save it with the username "logged out", this does not have a password as an admin may need to change the author from "logged out" and so cannot have a password
             return redirect(url_for("challenges.notes.home"))#return to the homepage
     
     
-        notes_db.insert(session["username"], title, note_text, "") #save it to the database
+        notes_db.insert(session["username"], title, note_text, password) #save it to the database
         return redirect(url_for("challenges.notes.home"))#return to the homepage
     
     if "username" not in session: #if the user is not logged in
